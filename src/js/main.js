@@ -4,6 +4,7 @@ import VideoPlayer from './modules/playVideo';
 import Difference from './modules/difference';
 import Forms from './modules/forms';
 import ShowInfo from './modules/showInfo';
+import Download from './modules/download';
 
 window.addEventListener('DOMContentLoaded', () => {
     'use strict';
@@ -51,10 +52,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
     new VideoPlayer('.showup .play', '.overlay').init();
     new VideoPlayer('.module__video-item .play', '.overlay').init();
-
     new Difference('.officerold', '.officernew', '.officer__card-item').init();
-
     new Forms('.form').init();
-    
     new ShowInfo('.module__info-show .plus').init();
+    new Download('.download').init();
 });
