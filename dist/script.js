@@ -5030,6 +5030,13 @@ window.addEventListener('DOMContentLoaded', function () {
     container: '.page'
   });
   slider.render();
+  var modulesPageSlider = new _modules_slider_slider_main__WEBPACK_IMPORTED_MODULE_0__["default"]({
+    btns: '.next',
+    container: '.moduleapp',
+    next: '.nextmodule',
+    prev: '.prevmodule'
+  });
+  modulesPageSlider.render();
   var showUpSlider = new _modules_slider_slider_mini__WEBPACK_IMPORTED_MODULE_1__["default"]({
     container: '.showup__content-slider',
     prev: '.showup__prev',
@@ -5482,10 +5489,10 @@ var MainSlider =
 function (_Slider) {
   _inherits(MainSlider, _Slider);
 
-  function MainSlider(btns) {
+  function MainSlider(btns, prev, next) {
     _classCallCheck(this, MainSlider);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(MainSlider).call(this, btns));
+    return _possibleConstructorReturn(this, _getPrototypeOf(MainSlider).call(this, btns, prev, next));
   }
 
   _createClass(MainSlider, [{
@@ -5527,28 +5534,49 @@ function (_Slider) {
       this.showSlides(this.slideIndex += n);
     }
   }, {
-    key: "render",
-    value: function render() {
+    key: "bindSwitches",
+    value: function bindSwitches(btns, n) {
       var _this2 = this;
 
-      try {
+      btns.forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          e.preventDefault();
+
+          _this2.plusSlides(n);
+        });
+      });
+    }
+  }, {
+    key: "bindTriggers",
+    value: function bindTriggers() {
+      var _this3 = this;
+
+      this.btns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          _this3.plusSlides(1);
+        });
+        btn.parentNode.previousElementSibling.addEventListener('click', function (e) {
+          e.preventDefault();
+          _this3.slideIndex = 1;
+
+          _this3.showSlides(_this3.slideIndex);
+        });
+      });
+      this.bindSwitches(this.prev, -1);
+      this.bindSwitches(this.next, 1);
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      if (this.container) {
         try {
           this.hanson = document.querySelector('.hanson');
         } catch (e) {}
 
-        this.btns.forEach(function (btn) {
-          btn.addEventListener('click', function () {
-            _this2.plusSlides(1);
-          });
-          btn.parentNode.previousElementSibling.addEventListener('click', function (e) {
-            e.preventDefault();
-            _this2.slideIndex = 1;
-
-            _this2.showSlides(_this2.slideIndex);
-          });
-        });
         this.showSlides(this.slideIndex);
-      } catch (e) {}
+        this.bindTriggers();
+      }
     }
   }]);
 
@@ -5671,21 +5699,25 @@ function (_Slider) {
     value: function bindTriggers() {
       var _this2 = this;
 
-      this.next.addEventListener('click', function () {
-        return _this2.nextSlide();
+      this.next.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          return _this2.nextSlide();
+        });
       });
-      this.prev.addEventListener('click', function () {
-        for (var i = _this2.slides.length - 1; i > 0; i--) {
-          if (_this2.slides[i].tagName !== 'BUTTON') {
-            var active = _this2.slides[i];
+      this.prev.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          for (var i = _this2.slides.length - 1; i > 0; i--) {
+            if (_this2.slides[i].tagName !== 'BUTTON') {
+              var active = _this2.slides[i];
 
-            _this2.container.insertBefore(active, _this2.slides[0]);
+              _this2.container.insertBefore(active, _this2.slides[0]);
 
-            _this2.decorizeSlides();
+              _this2.decorizeSlides();
 
-            break;
+              break;
+            }
           }
-        }
+        });
       });
     }
   }, {
@@ -5699,11 +5731,15 @@ function (_Slider) {
       this.container.addEventListener('mouseenter', function () {
         clearInterval(autoplay);
       });
-      this.next.addEventListener('mouseenter', function () {
-        clearInterval(autoplay);
+      this.next.forEach(function (btn) {
+        btn.addEventListener('mouseenter', function () {
+          clearInterval(autoplay);
+        });
       });
-      this.prev.addEventListener('mouseenter', function () {
-        clearInterval(autoplay);
+      this.prev.forEach(function (btn) {
+        btn.addEventListener('mouseenter', function () {
+          clearInterval(autoplay);
+        });
       });
     }
   }, {
@@ -5721,11 +5757,15 @@ function (_Slider) {
           this.container.addEventListener('mouseleave', function () {
             _this4.startAutoplay();
           });
-          this.next.addEventListener('mouseleave', function () {
-            _this4.startAutoplay();
+          this.next.forEach(function (btn) {
+            btn.addEventListener('mouseleave', function () {
+              _this4.startAutoplay();
+            });
           });
-          this.prev.addEventListener('mouseleave', function () {
-            _this4.startAutoplay();
+          this.prev.forEach(function (btn) {
+            btn.addEventListener('mouseleave', function () {
+              _this4.startAutoplay();
+            });
           });
         }
       } catch (e) {}
@@ -5777,8 +5817,8 @@ var Slider = function Slider() {
   } catch (e) {}
 
   this.btns = document.querySelectorAll(btns);
-  this.prev = document.querySelector(prev);
-  this.next = document.querySelector(next);
+  this.prev = document.querySelectorAll(prev);
+  this.next = document.querySelectorAll(next);
   this.activeClass = activeClass;
   this.animate = animate;
   this.autoplay = autoplay;

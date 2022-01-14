@@ -39,17 +39,21 @@ export default class MiniSlider extends Slider {
     }
 
     bindTriggers() {
-        this.next.addEventListener('click', () => this.nextSlide());
+        this.next.forEach(btn => {
+            btn.addEventListener('click', () => this.nextSlide());
+        });
 
-        this.prev.addEventListener('click', () => {
-            for(let i = this.slides.length - 1; i > 0; i--) {
-                if(this.slides[i].tagName !== 'BUTTON') {
-                    let active = this.slides[i];
-                    this.container.insertBefore(active, this.slides[0]);
-                    this.decorizeSlides();
-                    break;
+        this.prev.forEach(btn => {
+            btn.addEventListener('click', () => {
+                for(let i = this.slides.length - 1; i > 0; i--) {
+                    if(this.slides[i].tagName !== 'BUTTON') {
+                        let active = this.slides[i];
+                        this.container.insertBefore(active, this.slides[0]);
+                        this.decorizeSlides();
+                        break;
+                    }
                 }
-            }
+            });
         });
     }
 
@@ -62,12 +66,16 @@ export default class MiniSlider extends Slider {
             clearInterval(autoplay);
         });
 
-        this.next.addEventListener('mouseenter', () => {
-            clearInterval(autoplay);
+        this.next.forEach(btn => {
+            btn.addEventListener('mouseenter', () => {
+                clearInterval(autoplay);
+            });
         });
 
-        this.prev.addEventListener('mouseenter', () => {
-            clearInterval(autoplay);
+        this.prev.forEach(btn => {
+            btn.addEventListener('mouseenter', () => {
+                clearInterval(autoplay);
+            });
         });
     }
 
@@ -89,13 +97,17 @@ export default class MiniSlider extends Slider {
                 this.container.addEventListener('mouseleave', () => {
                     this.startAutoplay();
                 });
-        
-                this.next.addEventListener('mouseleave', () => {
-                    this.startAutoplay();
+
+                this.next.forEach(btn => {
+                    btn.addEventListener('mouseleave', () => {
+                        this.startAutoplay();
+                    });
                 });
-        
-                this.prev.addEventListener('mouseleave', () => {
-                    this.startAutoplay();
+
+                this.prev.forEach(btn => {
+                    btn.addEventListener('mouseleave', () => {
+                        this.startAutoplay();
+                    });
                 });
             }
         } catch(e) {}
